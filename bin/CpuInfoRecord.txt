@@ -1,0 +1,6 @@
+date: 2019/01/10
+time: 11:54:25
+Core #0: 31C
+Core #1: 31C
+Core #2: 32C
+Core #3: 32C
