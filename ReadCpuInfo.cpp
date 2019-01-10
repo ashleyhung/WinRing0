@@ -116,7 +116,7 @@ void ReadCpuInfo::SysTimeDisplay()
 {
     clearRecordFile();
     SYSTEMTIME start; //windows.h中   
-    GetLocalTime(&start);//time.h的tm结构体一样的效果   
+    GetLocalTime(&start);
     //printf("%d\n", start.wHour);
 #if (CONSOLE_PRINT)
     printf("date: %02d/%02d/%02d\n",
