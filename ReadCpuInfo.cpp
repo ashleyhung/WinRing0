@@ -11,7 +11,7 @@ using namespace std;
 
 ReadCpuInfo::ReadCpuInfo()
 {
-    ReadCpuInfoInit();      //构造函数初始化dll
+    ReadCpuInfoInit();      //Initial dll
     strcpy_s(fileName, "CpuInfoRecord.txt");
 }
 
@@ -20,26 +20,26 @@ ReadCpuInfo::~ReadCpuInfo()
     ReadCpuInfoExit();
 }
 
-void ReadCpuInfo::ReadCpuTemp()      //主要函数
+void ReadCpuInfo::ReadCpuTemp()      
 {
-    for (size_t i = 0; i < coreNumber; i++) //遍历CPU
+    for (size_t i = 0; i < coreNumber; i++) 
     {
         int mask =  0x01 << i;         
-        SetProcessAffinityMask(GetCurrentProcess(), mask);//设置当前使用线程(CPU)
+        SetProcessAffinityMask(GetCurrentProcess(), mask);
         DWORD eax, ebx, ecx, edx;
-        Rdmsr(0x19c, &eax, &edx);    //读取温度寄存器（eax&0x7f0000可以获得温度数据）
-        cpuTemp[i] = Tjmax - ((eax & 0x7f0000) >> 16);//实际温度= Tjmax - 温度数据
+        Rdmsr(0x19c, &eax, &edx);    //Read temp（eax&0x7f0000）
+        cpuTemp[i] = Tjmax - ((eax & 0x7f0000) >> 16);//Real temp= Tjmax - value
     }
 
 }
 
-void ReadCpuInfo::ReadCpuInfoInit()      //初始化
+void ReadCpuInfo::ReadCpuInfoInit()      
 {
-//    if (true == CheckAndPrint("Init DLL function", InitializeOls()))                   //dll的初始化
+//    if (true == CheckAndPrint("Init DLL function", InitializeOls()))                   
 //    {
-//       if (true == CheckAndPrint("IsCpuid function", IsCpuid()))                      //判断是否支持Cpuid
+//       if (true == CheckAndPrint("IsCpuid function", IsCpuid()))                     
 //        {
-//          if (true == CheckAndPrint("Ismsr function", IsMsr()))                       //是否支持Rdmsr
+//          if (true == CheckAndPrint("Ismsr function", IsMsr()))                       
 //          {
                 HMODULE m_hOpenLibSys;
                 DWORD TjMax;
@@ -54,13 +54,13 @@ void ReadCpuInfo::ReadCpuInfoInit()      //初始化
                     return ;
                 }
                 DWORD eax, ebx, ecx, edx;
-                Rdmsr(0x1A2, &eax, &edx);   //读取寄存器
-                Tjmax = (eax & 0xff0000) >> 16; //获得Tjmax
+                Rdmsr(0x1A2, &eax, &edx);  
+                Tjmax = (eax & 0xff0000) >> 16; //Get Tjmax
 //                printf("%d\n", Tjmax);                          //show max temperature
                 SYSTEM_INFO sysInfo;
                 GetSystemInfo(&sysInfo);
-                coreNumber = sysInfo.dwNumberOfProcessors;  //获得线程数
-                SetProcessAffinityMask(GetCurrentProcess(), 1);    //切换到第一个cpu;
+                coreNumber = sysInfo.dwNumberOfProcessors;  
+                SetProcessAffinityMask(GetCurrentProcess(), 1);  //Get first cpu
     //      }
       // }
 //    }
